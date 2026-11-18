@@ -1,0 +1,104 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lab Equipment Tracker</title>
+<style>
+:root{--bg:#f3f5f9;--card:#fff;--ink:#1b2432;--mut:#6a7688;--line:#e2e7ef;--pri:#2457d6;--side:#0f1726;--ok:#117a57;--okb:#e1f4ec;--warn:#9a6700;--warnb:#fdf0d5;--bad:#b42323;--badb:#fde4e4;--inp:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#0c1118;--card:#151b26;--ink:#e6ebf3;--mut:#8b97a9;--line:#263043;--pri:#5b8cff;--side:#070b11;--ok:#4cd6a0;--okb:#12352a;--warn:#f0b955;--warnb:#3a2d12;--bad:#ff8a8a;--badb:#3d1c1c;--inp:#0f141d}}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+.mut,small{color:var(--mut)}h2{margin:0;font-size:22px}h4{margin:0 0 8px}
+input,select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--inp);color:var(--ink);font:inherit}
+label{display:block;font-size:12px;color:var(--mut);margin-bottom:10px}label input,label select{margin-top:4px;color:var(--ink);font-size:14px}
+.btn{padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{border-color:var(--pri)}.btn.p{background:var(--pri);border-color:var(--pri);color:#fff}.btn.w{width:100%;padding:10px;margin:6px 0 10px}.btn.d{color:var(--bad)}
+.lg{min-height:100vh;display:grid;place-items:center}.lc{width:360px;background:var(--card);padding:32px;border-radius:14px;border:1px solid var(--line);box-shadow:0 10px 30px #0001}
+.lc h1{margin:0;font-size:22px}.seg{display:flex;background:var(--bg);border-radius:9px;padding:3px;margin:16px 0}.seg button{flex:1;border:0;background:none;padding:7px;border-radius:7px;color:var(--mut);font:inherit;cursor:pointer}.seg .on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 3px #0002}
+.sh{display:grid;grid-template-columns:230px 1fr;min-height:100vh}aside{background:var(--side);color:#cfd8e6;padding:18px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.br{font-weight:700;color:#fff;font-size:16px;padding:6px 10px 18px}.nav{flex:1}.nav a{display:block;padding:9px 12px;border-radius:8px;cursor:pointer;color:#aab6c8;margin-bottom:2px}.nav a:hover{background:#ffffff12}.nav a.on{background:var(--pri);color:#fff}
+.ft2{border-top:1px solid #ffffff1f;padding-top:12px;display:grid;gap:8px}.ft2 small{color:#8795ab}.ft2 .btn{background:#ffffff0f;color:#dbe3ef;border-color:#ffffff1f}
+.live{width:8px;height:8px;border-radius:50%;background:#2fd18b;display:inline-block;margin-right:6px}
+main{padding:26px 30px;min-width:0}.hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.tb{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border:0}
+.ac{white-space:nowrap;text-align:right}.ac .btn{padding:4px 9px;font-size:12px;margin-left:4px}
+.b{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}.ok{background:var(--okb);color:var(--ok)}.warn{background:var(--warnb);color:var(--warn)}.bad{background:var(--badb);color:var(--bad)}.pri{background:var(--pri);color:#fff}.gray{background:var(--line);color:var(--mut)}
+.sts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}.s{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}.s b{font-size:26px;display:block}.s span{color:var(--mut);font-size:12px}
+.g2c{display:grid;grid-template-columns:1fr 1fr;gap:16px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.chip{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 7px;margin:2px;font-size:12px}
+.ov{position:fixed;inset:0;background:#0008;display:grid;place-items:center;z-index:9;padding:16px}.md{background:var(--card);border-radius:14px;padding:24px;width:min(640px,100%);max-height:92vh;overflow:auto}.md h3{margin:0 0 14px}.ft{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+#toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:9px;opacity:0;transition:.2s;z-index:20}#toast.s{opacity:1}#toast.e{background:var(--bad);color:#fff}
+@media(max-width:800px){.sh{grid-template-columns:1fr}aside{position:static;height:auto}.g2c,.tb,.g2{grid-template-columns:1fr}}
+</style></head><body><div id="app"></div><div id="modal"></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let U=null,page='',EQ=[],USERS=[],LOG=[],ver=0,F={q:'',cat:'',st:''};const SH={},D={};
+async function api(p,m='GET',b){const r=await fetch('/api/'+p,{method:m,headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):undefined});const j=await r.json().catch(()=>({}));
+ if(r.status==401&&U&&p!='login'){showLogin();throw new Error('Session expired')}if(!r.ok)throw new Error(j.error||'Request failed');return j}
+let tt;function toast(m,e){const t=$('#toast');t.textContent=m;t.className=e?'s e':'s';clearTimeout(tt);tt=setTimeout(()=>t.className='',2800)}
+const days=d=>Math.floor((new Date(d)-new Date(new Date().toDateString()))/864e5);
+const calB=d=>!d?'<span class=mut>—</span>':days(d)<0?`<span class="b bad">Overdue ${esc(d)}</span>`:days(d)<=30?`<span class="b warn">Due ${esc(d)}</span>`:`<span class=mut>${esc(d)}</span>`;
+const condB=c=>`<span class="b ${c=='Good'?'ok':c=='Need to Repair'?'bad':'warn'}">${esc(c||'—')}</span>`;
+const th=a=>'<thead><tr>'+a.map(x=>`<th>${x}</th>`).join('')+'</tr></thead>';
+const fld=(n,l,v='',t='text',r=0,x='')=>`<label>${l}<input name=${n} type=${t} value="${esc(v)}" ${r?'required':''} ${x}></label>`;
+function showLogin(){U=null;let role='user';$('#modal').innerHTML='';$('#app').innerHTML=`<div class=lg><form id=lf class=lc><h1>Lab Equipment Tracker</h1><div class=mut>R&amp;D · EDS Lab</div>
+<div class=seg><button type=button class=on data-r=user>User</button><button type=button data-r=admin>Admin</button></div>
+<label>Username<input name=username required autofocus autocomplete=username></label><label>Password<input name=password type=password required autocomplete=current-password></label>
+<button class="btn p w">Sign in</button></form></div>`;
+ document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{role=b.dataset.r;document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x==b))});
+ $('#lf').onsubmit=async e=>{e.preventDefault();try{U=await api('login','POST',{...Object.fromEntries(new FormData(e.target)),portal:role});boot()}catch(x){toast(x.message,1)}}}
+const NAV={admin:[['dash','Dashboard'],['inv','Equipment'],['usr','Users'],['log','Activity']],user:[['mine','My Equipment'],['all','All Equipment']]};
+function boot(){const nav=NAV[U.admin?'admin':'user'];$('#app').innerHTML=`<div class=sh><aside><div class=br>Lab Equipment Tracker</div><nav class=nav>${nav.map(([p,l])=>`<a data-p=${p} onclick="go('${p}')">${l}</a>`).join('')}</nav>
+<div class=ft2><div><b>${esc(U.name)}</b><br><small>${U.admin?'Administrator':'User'}${U.emp_id?' · '+esc(U.emp_id):''}</small></div><div><span class=live></span><small>Live sync</small></div><button class=btn onclick="pwForm()">Change password</button><button class=btn onclick="out()">Sign out</button></div></aside><main id=main></main></div>`;
+ refresh().then(()=>{go(nav[0][0]);if(U.must_change)pwForm(1)})}
+async function out(){await api('logout','POST').catch(()=>{});showLogin()}
+async function refresh(){const[v,e]=await Promise.all([api('version'),api('equipment')]);ver=v.v;EQ=e;if(U.admin)[USERS,LOG]=await Promise.all([api('users'),api('log')]);draw()}
+setInterval(async()=>{if(!U)return;try{const v=await api('version');if(v.v!=ver)await refresh()}catch(x){}},4000);
+function go(p){page=p;F={q:'',cat:'',st:''};document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('on',a.dataset.p==p));$('#main').innerHTML=SH[p]();draw()}
+function draw(){D[page]&&D[page]()}
+const tb=()=>`<div class=tb><input placeholder="Search ID, name, make, serial, holder…" oninput="F.q=this.value;draw()" value="${esc(F.q)}"><select onchange="F.cat=this.value;draw()"><option value="">All categories${[...new Set(EQ.map(e=>e.category))].sort().map(c=>`<option>${esc(c)}`).join('')}</select><select onchange="F.st=this.value;draw()"><option value="">Any status<option>Available<option>Checked out</select></div>`;
+const tbl=`<div class=card><div class=tw><table id=t></table></div></div>`;
+const filt=l=>{const q=F.q.toLowerCase();return l.filter(e=>(!F.cat||e.category==F.cat)&&(!F.st||e.status==F.st)&&(!q||[e.tag,e.name,e.make,e.model,e.serial,e.holder,e.remarks].join(' ').toLowerCase().includes(q)))};
+const empty=(n,m)=>`<tr><td colspan=${n} class=mut style="text-align:center;padding:26px">${m}</td></tr>`;
+// ---- admin
+SH.dash=()=>`<div class=hd><h2>Dashboard</h2></div><div id=st class=sts></div><div class=g2c><div class=card><h4>Currently held by</h4><table id=hold></table></div><div class=card><h4>Needs attention</h4><table id=att></table></div></div>`;
+D.dash=()=>{const n=EQ.length,out=EQ.filter(e=>e.holder_id).length;
+ $('#st').innerHTML=[['Total items',n],['Available',n-out],['Checked out',out],['Calibration due ≤ 30 days',EQ.filter(e=>e.cal_due&&days(e.cal_due)<=30).length],['Need repair',EQ.filter(e=>e.cond=='Need to Repair').length]].map(([l,v])=>`<div class=s><b>${v}</b><span>${l}</span></div>`).join('');
+ const by={};EQ.filter(e=>e.holder_id).forEach(e=>(by[e.holder]=by[e.holder]||[]).push(e));
+ $('#hold').innerHTML=Object.keys(by).length?Object.entries(by).map(([k,v])=>`<tr><td style="width:35%"><b>${esc(k)}</b><br><small>${v.length} item(s)</small></td><td>${v.map(e=>`<span class=chip title="${esc(e.name)}">${esc(e.tag)}</span>`).join('')}</td></tr>`).join(''):empty(2,'Nothing is checked out.');
+ const a=EQ.filter(e=>e.cond!='Good'||(e.cal_due&&days(e.cal_due)<=30));
+ $('#att').innerHTML=a.length?a.slice(0,14).map(e=>`<tr><td><b>${esc(e.tag)}</b> <small>${esc(e.name)}</small></td><td class=ac>${e.cond!='Good'?condB(e.cond):calB(e.cal_due)}</td></tr>`).join('')+(a.length>14?`<tr><td colspan=2 class=mut>+${a.length-14} more</td></tr>`:''):empty(2,'All clear.')};
+SH.inv=()=>`<div class=hd><h2>Equipment</h2><div><a class=btn href="/api/export.csv">Export CSV</a> <button class="btn p" onclick="eqForm()">+ Add equipment</button></div></div>${tb()}${tbl}`;
+D.inv=()=>{const l=filt(EQ);$('#t').innerHTML=th(['ID','Equipment','Make / Model','Serial','Condition','Calibration','Status / Holder',''])+'<tbody>'+(l.map(e=>`<tr><td><b>${esc(e.tag)}</b></td><td>${esc(e.name)}<br><small>${esc(e.category)} · ${esc(e.location)}</small></td><td>${esc(e.make)} ${esc(e.model)}<br><small>${esc(e.rng)}</small></td><td>${esc(e.serial)}</td><td>${condB(e.cond)}${e.remarks?`<br><small>${esc(e.remarks)}</small>`:''}</td><td>${calB(e.cal_due)}</td>
+<td>${e.holder?`<b>${esc(e.holder)}</b><br><small>${esc(e.holder_emp)} · since ${esc((e.since||'').slice(0,10))}</small>`:'<span class="b ok">Available</span>'}</td>
+<td class=ac>${e.holder?`<button class=btn data-a=ret data-id=${e.id}>Return</button>`:''}<button class=btn data-a=asg data-id=${e.id}>Assign</button><button class=btn data-a=edit data-id=${e.id}>Edit</button><button class="btn d" data-a=del data-id=${e.id}>Remove</button></td></tr>`).join('')||empty(8,'No equipment found.'))+'</tbody>'};
+SH.usr=()=>`<div class=hd><h2>Users</h2><button class="btn p" onclick="userForm()">+ Add user</button></div>${tbl}`;
+D.usr=()=>{$('#t').innerHTML=th(['Name','Username','Employee ID','Role','Holding','Status',''])+'<tbody>'+USERS.map(u=>`<tr><td><b>${esc(u.name)}</b></td><td>${esc(u.username)}</td><td>${esc(u.emp_id)}</td><td>${u.role}</td><td>${u.held}</td><td>${u.active?'<span class="b ok">Active</span>':'<span class="b gray">Inactive</span>'}</td>
+<td class=ac><button class=btn data-a=ures data-id=${u.id}>Reset password</button><button class=btn data-a=utog data-id=${u.id}>${u.active?'Deactivate':'Activate'}</button></td></tr>`).join('')+'</tbody>'};
+SH.log=()=>`<div class=hd><h2>Activity</h2></div>${tbl}`;
+D.log=()=>{$('#t').innerHTML=th(['Time','By','Action','Item','Detail'])+'<tbody>'+(LOG.map(l=>`<tr><td class=mut>${esc(l.ts)}</td><td>${esc(l.actor)}</td><td><span class="b gray">${esc(l.action)}</span></td><td>${l.tag?`<b>${esc(l.tag)}</b> <small>${esc(l.name)}</small>`:''}</td><td>${esc(l.target)}</td></tr>`).join('')||empty(5,'No activity yet.'))+'</tbody>'};
+// ---- user
+const uRow=e=>`<tr><td><b>${esc(e.tag)}</b></td><td>${esc(e.name)}<br><small>${esc(e.category)}</small></td><td>${esc(e.make)} ${esc(e.model)}</td><td>${esc(e.serial)}</td><td>${condB(e.cond)}</td><td>${calB(e.cal_due)}</td>
+<td>${e.mine?'<span class="b pri">With you</span>':e.status=='Available'?'<span class="b ok">Available</span>':'<span class="b gray">In use</span>'}</td>
+<td class=ac>${e.mine?`<button class=btn data-a=ret data-id=${e.id}>Remove from my list</button>`:e.status=='Available'&&e.cond!='Need to Repair'?`<button class="btn p" data-a=take data-id=${e.id}>Add to my list</button>`:''}</td></tr>`;
+const uh=th(['ID','Equipment','Make / Model','Serial','Condition','Calibration','Status','']);
+SH.mine=()=>`<div class=hd><h2>My Equipment</h2></div><div id=st class=sts></div>${tbl}`;
+D.mine=()=>{const l=EQ.filter(e=>e.mine);$('#st').innerHTML=`<div class=s><b>${l.length}</b><span>Items you hold</span></div>`;$('#t').innerHTML=uh+'<tbody>'+(l.map(uRow).join('')||empty(8,'You are not holding anything. Open <b>All Equipment</b> to add items.'))+'</tbody>'};
+SH.all=()=>`<div class=hd><h2>All Equipment</h2></div>${tb()}${tbl}`;
+D.all=()=>{$('#t').innerHTML=uh+'<tbody>'+(filt(EQ).map(uRow).join('')||empty(8,'No equipment found.'))+'</tbody>'};
+// ---- actions
+async function act(a,id){const e=EQ.find(x=>x.id==id),u=USERS.find(x=>x.id==id);try{
+ if(a=='take'){await api(`equipment/${id}/take`,'POST');toast(`${e.tag} added to your list`)}
+ else if(a=='ret'){await api(`equipment/${id}/return`,'POST');toast(`${e.tag} returned`)}
+ else if(a=='del'){if(!confirm(`Remove ${e.tag} – ${e.name} from the inventory?`))return;await api('equipment/'+id,'DELETE');toast('Equipment removed')}
+ else if(a=='edit')return eqForm(e);else if(a=='asg')return asgForm(e);
+ else if(a=='ures')return modal('Reset password – '+esc(u.name),fld('password','Temporary password (6+ chars)','','text',1)+'<small>User must change it at next sign-in.</small>','Reset',d=>api('users/'+id,'PUT',d).then(()=>toast('Password reset')));
+ else if(a=='utog'){await api('users/'+id,'PUT',{active:!u.active});toast('Updated')}
+ await refresh()}catch(x){toast(x.message,1)}}
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-a]');if(b)act(b.dataset.a,b.dataset.id)});
+function modal(t,body,ok,fn,lock){const m=$('#modal');m.innerHTML=`<div class=ov><form class=md><h3>${t}</h3>${body}<div class=ft>${lock?'':'<button type=button class=btn onclick="closeM()">Cancel</button>'}<button class="btn p">${ok}</button></div></form></div>`;
+ m.querySelector('form').onsubmit=async ev=>{ev.preventDefault();try{await fn(Object.fromEntries(new FormData(ev.target)));closeM();await refresh()}catch(x){toast(x.message,1)}};const f=m.querySelector('input,select');f&&f.focus()}
+const closeM=()=>$('#modal').innerHTML='';
+function eqForm(e){const v=e||{};modal(e?'Edit equipment':'Add equipment',`<div class=g2>${fld('tag','Equipment ID',v.tag,'text',1)}${fld('name','Name',v.name,'text',1)}${fld('category','Category',v.category,'text',0,'list=cats')}${fld('make','Make',v.make)}${fld('model','Model No.',v.model)}${fld('serial','Serial No.',v.serial)}${fld('rng','Range',v.rng)}${fld('location','Location',v.location||'EDS Lab')}
+<label>Condition<select name=cond>${['Good','Calibration Due','Need to Repair'].map(c=>`<option ${v.cond==c?'selected':''}>${c}</option>`).join('')}</select></label>${fld('agency','Calibration agency',v.agency)}${fld('cal_last','Last calibration',v.cal_last,'date')}${fld('cal_due','Calibration due',v.cal_due,'date')}</div>${fld('remarks','Remarks',v.remarks)}
+<datalist id=cats>${[...new Set(EQ.map(x=>x.category))].map(c=>`<option>${esc(c)}`).join('')}</datalist>`,e?'Save':'Add',d=>api(e?'equipment/'+e.id:'equipment',e?'PUT':'POST',d).then(()=>toast(e?'Saved':'Equipment added')))}
+function asgForm(e){modal(`Assign ${esc(e.tag)}`,`<label>Holder<select name=user_id><option value="">— Unassigned (in lab) —${USERS.filter(u=>u.active).map(u=>`<option value=${u.id} ${u.id==e.holder_id?'selected':''}>${esc(u.name)}${u.emp_id?' ('+esc(u.emp_id)+')':''}</option>`).join('')}</select></label>`,'Save',d=>api(`equipment/${e.id}/assign`,'POST',{user_id:d.user_id?+d.user_id:null}).then(()=>toast('Assignment updated')))}
+function userForm(){modal('Add user',`<div class=g2>${fld('name','Full name','','text',1)}${fld('emp_id','Employee ID')}${fld('username','Username','','text',1)}${fld('password','Temporary password','','text',1)}</div><label>Role<select name=role><option value=user>User<option value=admin>Admin</select></label>`,'Create',d=>api('users','POST',d).then(()=>toast('User created')))}
+function pwForm(force){modal(force?'Set a new password':'Change password',(force?'<p class=mut>For security, replace the default password before continuing.</p>':'')+fld('old','Current password','','password',1)+fld('new','New password (6+ chars)','','password',1),'Update',d=>api('password','POST',d).then(()=>{U.must_change=0;toast('Password updated')}),force)}
+api('me').then(u=>{U=u;boot()}).catch(showLogin);
+</script></body></html>
